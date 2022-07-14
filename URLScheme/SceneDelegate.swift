@@ -10,19 +10,27 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var sceneCoordinator: SceneCoordinator?
 
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        let tabBarController = UITabBarController()
+
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = tabBarController
+        window?.makeKeyAndVisible()
+        sceneCoordinator = SceneCoordinator(rootViewController: tabBarController)
+        sceneCoordinator?.start()
 
         if let urlContext = connectionOptions.urlContexts.first {
-            let sendingAppID = urlContext.options.sourceApplication
-            let url = urlContext.url
-            print("source application = \(sendingAppID ?? "Unknown")")
-            print("url = \(url)")
+            print(urlContext.url)
+            sceneCoordinator?.presentThird()
+        } else {
+            sceneCoordinator?.presentFirst()
         }
     }
 
@@ -31,10 +39,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         if let urlContext = URLContexts.first {
-            let sendingAppID = urlContext.options.sourceApplication
-            let url = urlContext.url
-            print("source application = \(sendingAppID ?? "Unknown")")
-            print("url = \(url)")
+            print(urlContext.url)
+            sceneCoordinator?.presentSecond()
         }
     }
 }
