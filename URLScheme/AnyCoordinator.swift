@@ -29,17 +29,7 @@ class AnyCoordinator {
 
     /// Dismiss and stop
     func stop() {
-        parent?.children.removeAll { $0 == self }
-    }
-}
-
-extension AnyCoordinator: Hashable {
-    static func == (lhs: AnyCoordinator, rhs: AnyCoordinator) -> Bool {
-        ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(self))
+        parent?.children.removeAll { $0 === self }
     }
 }
 
